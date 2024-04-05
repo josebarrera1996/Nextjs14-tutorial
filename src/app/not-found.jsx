@@ -1,5 +1,6 @@
 import Link from "next/link";
 
+// Componente a mostrar cuando se intenta acceder a una ruta no existente
 const NotFound = () => {
     return (
         <div>

@@ -3,13 +3,16 @@ import Navbar from '@/components/navbar/Navbar';
 import Footer from '@/components/footer/Footer';
 import './globals.css';
 
+// Configuración de la fuente Inter con el subconjunto "latin"
 const inter = Inter({ subsets: ['latin'] });
 
+// Metadatos de la aplicación
 export const metadata = {
   title: 'Next App',
   description: 'Next.js starter app',
 };
 
+// Componente de diseño raíz (layout principal)
 export default function RootLayout({ children }) {
   return (
     <html lang="en">
