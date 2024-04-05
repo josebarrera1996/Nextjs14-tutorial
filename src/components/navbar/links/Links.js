@@ -1,4 +1,7 @@
-import Link from 'next/link';
+"use client";
+
+import { useState } from "react";
+import Image from "next/image";
 import NavLink from "./navLink/navLink";
 import styles from "./links.module.css";
 
@@ -24,28 +27,50 @@ const links = [
 
 // Componente que representará los enlaces de la barra de navegación
 const Links = () => {
+    // Estado para indicar si el modal se abrirá o no
+    const [open, setOpen] = useState(false);
+
     // Variables temporales de sesión y de administrador
     const session = true;
     const isAdmin = true;
 
     return (
-        <div className={styles.links}>
-            {links.map((link) => (
-                // Envolviendo los enlaces en este componente
-                <NavLink item={link} key={link.title} />
-            ))} {
-                // Si el usuario esta logeado...
-                session ? (
-                    <>
-                        {/* Si es admin... */}
-                        {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-                        <button className={styles.logout}>Logout</button>
-                    </>
-                ) : (
-                    // Si no esta logeado, mostrar...
-                    <NavLink item={{ title: "Login", path: "/login" }} />
-                )
-            }
+        <div className={styles.container}>
+            <div className={styles.links}>
+                {links.map((link) => (
+                    // Envolviendo los enlaces en este componente
+                    <NavLink item={link} key={link.title} />
+                ))} {
+                    // Si el usuario esta logeado...
+                    session ? (
+                        <>
+                            {/* Si es admin... */}
+                            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
+                            <button className={styles.logout}>Logout</button>
+                        </>
+                    ) : (
+                        // Si no esta logeado, mostrar...
+                        <NavLink item={{ title: "Login", path: "/login" }} />
+                    )
+                }
+            </div>
+            {/* Botón que se visualizará cuando el ancho de la pantalla sea menor a 768px (breakpoint)  */}
+            <Image
+                className={styles.menuButton}
+                src={'/menu.png'}
+                alt="Menu"
+                width={30}
+                height={30}
+                onClick={() => setOpen((prev) => !prev)}
+            />
+            {/* Modal con los enlaces que se mostrará cuando se lo active */}
+            {open && (
+                <div className={styles.mobileLinks}>
+                    {links.map((link) => (
+                        <NavLink item={link} key={link.title} />
+                    ))}
+                </div>
+            )}
         </div>
     );
 }
