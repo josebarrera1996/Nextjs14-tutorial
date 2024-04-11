@@ -1,11 +1,8 @@
+"use client";
 
 import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./contact.module.css";
-
-// Solución 2
-// Invocando el componente de forma dinámica para deshabilitar el SSR
-const HydrationTestNoSSR = dynamic(() => import("@/components/hydrationTest"), {ssr: false})
 
 // export const metadata = {
 //     title: "Contact Page",
@@ -23,8 +20,8 @@ const ContactPage = () => {
                 <Image src={'/contact.png'} alt="" fill className={styles.img} />
             </div>
             <div className={styles.formContainer}>
-                {/* Deshabilitando el SSR */}
-                <HydrationTestNoSSR />
+                {/* Solución 3 para deshabilitar el SSR */}
+                <div suppressHydrationWarning>Valor: {a}</div>
                 <form action="" className={styles.form}>
                     <input type="text" placeholder="Name and Surname" />
                     <input type="text" placeholder="Email Address" />
