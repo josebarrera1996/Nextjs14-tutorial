@@ -1,18 +1,14 @@
-"use client";
-
-import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./contact.module.css";
 
-// export const metadata = {
-//     title: "Contact Page",
-//     description: "Contact description",
-// };
+export const metadata = {
+    title: "Contact Page",
+    description: "Contact description",
+};
 
 const ContactPage = () => {
-    // Generando un número aleatorio
-    const a = Math.random();
-    console.log(a);
+    // Testeando que este componente sigue siendo de tipo servidor (por más que este en vuelto en uno de tipo cliente)
+    console.log('SSR: ContactPage')
 
     return (
         <div className={styles.container}>
@@ -20,8 +16,6 @@ const ContactPage = () => {
                 <Image src={'/contact.png'} alt="" fill className={styles.img} />
             </div>
             <div className={styles.formContainer}>
-                {/* Solución 3 para deshabilitar el SSR */}
-                <div suppressHydrationWarning>Valor: {a}</div>
                 <form action="" className={styles.form}>
                     <input type="text" placeholder="Name and Surname" />
                     <input type="text" placeholder="Email Address" />
