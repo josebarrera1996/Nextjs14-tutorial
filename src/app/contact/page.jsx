@@ -1,8 +1,11 @@
-"use client";
 
-import { useEffect, useState } from "react";
+import dynamic from "next/dynamic";
 import Image from "next/image";
 import styles from "./contact.module.css";
+
+// Solución 2
+// Invocando el componente de forma dinámica para deshabilitar el SSR
+const HydrationTestNoSSR = dynamic(() => import("@/components/hydrationTest"), {ssr: false})
 
 // export const metadata = {
 //     title: "Contact Page",
@@ -10,16 +13,6 @@ import styles from "./contact.module.css";
 // };
 
 const ContactPage = () => {
-    // Solución 1 para evitar el 'Hydration Error'
-    // Para asegurarse de que este componente corra del lado del cliente
-    const [isClient, setIsClient] = useState(false);
-
-    // Solución 1 para evitar el 'Hydration Error'
-    // Para asegurarse de que este componente corra del lado del cliente
-    useEffect(() => {
-        setIsClient(true);
-    }, []);
-
     // Generando un número aleatorio
     const a = Math.random();
     console.log(a);
@@ -30,8 +23,8 @@ const ContactPage = () => {
                 <Image src={'/contact.png'} alt="" fill className={styles.img} />
             </div>
             <div className={styles.formContainer}>
-                {/* Si se carga este componente desde el lado del cliente, mostrar el valor de 'a' */}
-                {isClient && a}
+                {/* Deshabilitando el SSR */}
+                <HydrationTestNoSSR />
                 <form action="" className={styles.form}>
                     <input type="text" placeholder="Name and Surname" />
                     <input type="text" placeholder="Email Address" />
