@@ -1,5 +1,6 @@
 "use client";
 
+import { useEffect, useState } from "react";
 import Image from "next/image";
 import styles from "./contact.module.css";
 
@@ -9,8 +10,17 @@ import styles from "./contact.module.css";
 // };
 
 const ContactPage = () => {
-    // Esto hará que en el navegador se muestre un valor y en el servidor otro. Es decir, no coincidirán.
-    // Este es un ejemplo sencillo de 'Hydration Error'.
+    // Solución 1 para evitar el 'Hydration Error'
+    // Para asegurarse de que este componente corra del lado del cliente
+    const [isClient, setIsClient] = useState(false);
+
+    // Solución 1 para evitar el 'Hydration Error'
+    // Para asegurarse de que este componente corra del lado del cliente
+    useEffect(() => {
+        setIsClient(true);
+    }, []);
+
+    // Generando un número aleatorio
     const a = Math.random();
     console.log(a);
 
@@ -20,8 +30,8 @@ const ContactPage = () => {
                 <Image src={'/contact.png'} alt="" fill className={styles.img} />
             </div>
             <div className={styles.formContainer}>
-                {/* Al mostrar este valor aleatorio generará errores */}
-                Valor: {a}
+                {/* Si se carga este componente desde el lado del cliente, mostrar el valor de 'a' */}
+                {isClient && a}
                 <form action="" className={styles.form}>
                     <input type="text" placeholder="Name and Surname" />
                     <input type="text" placeholder="Email Address" />
