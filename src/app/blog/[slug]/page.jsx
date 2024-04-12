@@ -1,7 +1,10 @@
 import Image from "next/image";
 import styles from "./singlePost.module.css";
 
-const SinglePostPage = () => {
+const SinglePostPage = ({ params }) => {
+
+    // Accediendo a el objeto 'params'
+    console.log(params); // { slug: 'post' }
 
     return (
         <div className={styles.container}>

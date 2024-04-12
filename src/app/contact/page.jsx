@@ -7,8 +7,6 @@ export const metadata = {
 };
 
 const ContactPage = () => {
-    // Testeando que este componente sigue siendo de tipo servidor (por más que este en vuelto en uno de tipo cliente)
-    console.log('SSR: ContactPage')
 
     return (
         <div className={styles.container}>
