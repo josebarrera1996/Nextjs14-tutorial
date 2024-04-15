@@ -1,4 +1,6 @@
 import Image from "next/image";
+import { Suspense } from "react";
+import PostUser from "@/components/postUser/PostUser";
 import styles from "./singlePost.module.css";
 
 // Método para obtener un post en específico (por su 'id')
@@ -28,11 +30,13 @@ const SinglePostPage = async ({ params }) => {
             <div className={styles.textContainer}>
                 <h1 className={styles.title}>{post.title}</h1>
                 <div className={styles.detail}>
-                    <Image className={styles.avatar} src={'/noavatar.png'} alt="" width={50} height={50} />
-                    <div className={styles.detailText}>
-                        <span className={styles.detailTitle}>Author</span>
-                        <span className={styles.detailValue}>Terry Jefferson</span>
-                    </div>
+                    {/* Implementando 'Suspense' para cargar 'PostUser' cuando ya esté cargado el 'Post' */}
+                    {/* Para el proceso de carga de 'PostUser' se mostrará un 'Loading' */}
+                    {post && (
+                        <Suspense fallback={<div>Loading...</div>}>
+                            <PostUser userId={post.userId} />
+                        </Suspense>
+                    )}
                     <div className={styles.detailText}>
                         <span className={styles.detailTitle}>Published</span>
                         <span className={styles.detailValue}>01.01.2024</span>
