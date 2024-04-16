@@ -1,6 +1,7 @@
 import Image from "next/image";
 import { Suspense } from "react";
 import PostUser from "@/components/postUser/PostUser";
+import { getFakePost } from "@/lib/data";
 import styles from "./singlePost.module.css";
 
 // Método para obtener un post en específico (por su 'id')
@@ -20,7 +21,10 @@ const SinglePostPage = async ({ params }) => {
     const { slug } = params;
 
     // Obteniendo los datos del objeto del post
-    const post = await getPost(slug);
+    // const post = await getPost(slug);
+
+    // Obteniendo los datos del objeto del post (sin API)
+    const post = await getFakePost(slug);
 
     return (
         <div className={styles.container}>
@@ -28,7 +32,7 @@ const SinglePostPage = async ({ params }) => {
                 <Image src="https://images.pexels.com/photos/15949261/pexels-photo-15949261/free-photo-of-edificios-cielo-azul-sombras-pueblo.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1" alt="" fill className={styles.img} />
             </div>
             <div className={styles.textContainer}>
-                <h1 className={styles.title}>{post.title}</h1>
+                <h1 className={styles.title}>{post?.title}</h1>
                 <div className={styles.detail}>
                     {/* Implementando 'Suspense' para cargar 'PostUser' cuando ya esté cargado el 'Post' */}
                     {/* Para el proceso de carga de 'PostUser' se mostrará un 'Loading' */}
@@ -43,7 +47,7 @@ const SinglePostPage = async ({ params }) => {
                     </div>
                 </div>
                 <div className={styles.content}>
-                    {post.body}
+                    {post?.body}
                 </div>
             </div>
         </div>

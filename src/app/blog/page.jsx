@@ -1,4 +1,5 @@
 import PostCard from "@/components/postCard/PostCard";
+import { getFakePosts } from "@/lib/data";
 import styles from "./blog.module.css";
 
 // Método para obtener los datos de la API de Posts de jsonplaceholder
@@ -20,7 +21,10 @@ const getPosts = async () => {
 
 const BlogPage = async () => {
     // Obteniendo los posts
-    const posts = await getPosts();
+    // const posts = await getPosts();
+
+    // Obteniendo los datos (sin utilizar API)
+    const posts = await getFakePosts();
 
     return (
         <div className={styles.container}>

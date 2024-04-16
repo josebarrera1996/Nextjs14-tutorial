@@ -1,5 +1,6 @@
 
 import Image from "next/image";
+import { getFakeUser } from "@/lib/data";
 import styles from "./postUser.module.css";
 
 // Método para traer los datos de un usuario en específico (por su ID)
@@ -20,7 +21,10 @@ const getUser = async (userId) => {
 // Componente que representará los datos de un Post pero enfocado a el usuario que lo realizó
 const PostUser = async ({ userId }) => {
     // Obteniendo los datos del usuario
-    const user = await getUser(userId);
+    // const user = await getUser(userId);
+
+    // Obteniendo los datos del usuario (sin API)
+    const user = await getFakeUser(userId);
 
     return (
         <div className={styles.container}>
@@ -33,7 +37,7 @@ const PostUser = async ({ userId }) => {
             />
             <div className={styles.texts}>
                 <span className={styles.title}>Author</span>
-                <span className={styles.username}>{user.username}</span>
+                <span className={styles.username}>{user?.username}</span>
             </div>
         </div>
     )
