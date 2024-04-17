@@ -1,29 +1,72 @@
-// Datos temporales
-const users = [
-    { id: 1, username: "John" },
-    { id: 2, username: "Jane" },
-];
+import { unstable_noStore as noStore } from "next/cache";
+import { Post, User } from "./models";
+import { connectToDb } from "./utils";
 
-const posts = [
-    { id: 1, title: "Post 1", body: "......", userId: 1 },
-    { id: 2, title: "Post 2", body: "......", userId: 1 },
-    { id: 3, title: "Post 3", body: "......", userId: 2 },
-    { id: 4, title: "Post 4", body: "......", userId: 2 },
-];
+/* Definiendo los métodos para traer datos (usuario/s, post/s) */
 
-/* Métodos que trabajan sobre datos sin la necesidad de utilizar una API */
+// POSTS
+// Método para traer a todos los Posts
+export const getPosts = async () => {
+    try {
+        // Conexión a la B.D
+        connectToDb();
 
-// Método que nos retornará los posts
-export const getFakePosts = async () => {
-    return posts;
+        // Traer los Posts
+        const posts = await Post.find();
+        return posts;
+    } catch (error) {
+        console.log(error);
+        throw new Error("Failed to fetch posts!");
+    }
 }
 
-// Método que nos retornará un post en específico
-export const getFakePost = async (id) => {
-    return posts.find((post) => post.id === parseInt(id));
-}
+// POST
+// Método para traer un Post en específco
+export const getPost = async (slug) => {
+    try {
+        // Conexión a la B.D
+        connectToDb();
 
-// Método que nos retornará un usuario en específico
-export const getFakeUser = async (id) => {
-    return users.find((user) => user.id === parseInt(id));
-}
+        // Traer el Post
+        const post = await Post.findOne({ slug }); // slug -> slug: slug
+        return post;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch post!");
+    }
+};
+
+// USERS
+// Método para traer a todos los Users
+export const getUsers = async () => {
+    try {
+        // Conexión a la B.D
+        connectToDb();
+
+        // Traer los Users
+        const users = await User.find();
+        return users;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch users!");
+    }
+};
+
+// USER
+// Método para traer a un User en específico
+export const getUser = async (id) => {
+    // No almacenar el User en el caché
+    noStore();
+    try {
+        // Conexión a la B.D
+        connectToDb();
+
+        // Traer el User
+        const user = await User.findById(id);
+        return user;
+    } catch (err) {
+        console.log(err);
+        throw new Error("Failed to fetch user!");
+    }
+};
+
