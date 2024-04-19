@@ -4,8 +4,22 @@ import PostUser from "@/components/postUser/PostUser";
 import { getPost } from "@/lib/data";
 import styles from "./singlePost.module.css";
 
-const SinglePostPage = async ({ params }) => {
+// Generando los metadatos de forma dinámica (para cada Post del Blog)
+export const generateMetadata = async ({ params }) => {
+    // Accediendo a la propiedad 'slug' del objeto 'params'
+    const { slug } = params;
 
+    // Obteniendo los datos del objeto del post
+    const post = await getPost(slug);
+
+    // Datos del objeto de metadatos
+    return {
+        title: post.title,
+        description: post.desc,
+    };
+};
+
+const SinglePostPage = async ({ params }) => {
     // Accediendo a la propiedad 'slug' del objeto 'params'
     const { slug } = params;
 

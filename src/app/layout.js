@@ -6,11 +6,19 @@ import './globals.css';
 // Configuración de la fuente Inter con el subconjunto "latin"
 const inter = Inter({ subsets: ['latin'] });
 
-// Metadatos de la aplicación
+// Metadatos
 export const metadata = {
-  title: 'Next App',
-  description: 'Next.js starter app',
+  title: {
+    // Título por defecto
+    default: "Next.js 14 Homepage",
+    // Plantilla para el título con un marcador de posición (%s)
+    // Tomará el 'title' de cada 'page.jsx' | Next.js 14"
+    template: "%s | Next.js 14"
+  },
+  // Descripción por defecto
+  description: "Next.js starter app description" 
 };
+
 
 // Componente de diseño raíz (layout principal)
 export default function RootLayout({ children }) {
