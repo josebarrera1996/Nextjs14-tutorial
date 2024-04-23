@@ -1,8 +1,19 @@
 import Image from "next/image";
 import { Suspense } from "react";
 import PostUser from "@/components/postUser/PostUser";
-import { getPost } from "@/lib/data";
+// import { getPost } from "@/lib/data";
 import styles from "./singlePost.module.css";
+
+// Método para obtener el Post al acceder al siguiente endpoint definido 
+const getPost = async (slug) => {
+    const res = await fetch(`http://localhost:3000/api/blog/${slug}`);
+
+    if (!res.ok) {
+        throw new Error("Something went wrong");
+    }
+
+    return res.json();
+};
 
 // Generando los metadatos de forma dinámica (para cada Post del Blog)
 export const generateMetadata = async ({ params }) => {
