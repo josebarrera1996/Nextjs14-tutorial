@@ -4,6 +4,7 @@ import { useState } from "react";
 import Image from "next/image";
 import NavLink from "./navLink/navLink";
 import styles from "./links.module.css";
+import { handleLogoutGithub } from "@/lib/actions";
 
 // Array de objetos que representa los enlaces y sus rutas
 const links = [
@@ -26,13 +27,9 @@ const links = [
 ];
 
 // Componente que representará los enlaces de la barra de navegación
-const Links = () => {
+const Links = ({ session }) => {
     // Estado para indicar si el modal se abrirá o no
     const [open, setOpen] = useState(false);
-
-    // Variables temporales de sesión y de administrador
-    const session = true;
-    const isAdmin = true;
 
     return (
         <div className={styles.container}>
@@ -42,11 +39,13 @@ const Links = () => {
                     <NavLink item={link} key={link.title} />
                 ))} {
                     // Si el usuario esta logeado...
-                    session ? (
+                    session?.user ? (
                         <>
                             {/* Si es admin... */}
-                            {isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
-                            <button className={styles.logout}>Logout</button>
+                            {session.user?.isAdmin && <NavLink item={{ title: "Admin", path: "/admin" }} />}
+                            <form action={handleLogoutGithub}>
+                                <button className={styles.logout}>Logout</button>
+                            </form>
                         </>
                     ) : (
                         // Si no esta logeado, mostrar...

@@ -3,6 +3,7 @@
 import { revalidatePath } from "next/cache";
 import { Post } from "./models";
 import { connectToDb } from "./utils";
+import { signIn, signOut } from "./auth";
 
 /* Definiendo las 'Server Actions' */
 
@@ -57,4 +58,16 @@ export const deletePost = async (formData) => {
         console.log(error);
         return { error: "Something went wrong!" };
     }
+}
+
+// Lógica para logearnos como usuario
+export const handleLoginGithub = async (e) => {
+    "use server";
+    await signIn('github');
+}
+
+// Lógica para deslogearnos
+export const handleLogoutGithub = async (e) => {
+    "use server";
+    await signOut();
 }
