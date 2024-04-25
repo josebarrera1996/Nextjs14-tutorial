@@ -1,7 +1,8 @@
 'use server';
 
 import { revalidatePath } from "next/cache";
-import { Post } from "./models";
+import bcrypt from 'bcryptjs';
+import { Post, User } from "./models";
 import { connectToDb } from "./utils";
 import { signIn, signOut } from "./auth";
 
@@ -70,4 +71,69 @@ export const handleLoginGithub = async (e) => {
 export const handleLogoutGithub = async (e) => {
     "use server";
     await signOut();
+}
+
+// Lógica para registrarse
+export const handleRegisterWithCredentials = async (formData) => {
+    // Obteniendo los valores de los siguientes campos
+    const { username, email, password, passwordRepeat } =
+        Object.fromEntries(formData);
+
+    // Si las passwords no coinciden...
+    if (password !== passwordRepeat) {
+        return { error: "Passwords do not match" };
+    }
+
+    try {
+        // Conexión con la B.D
+        connectToDb();
+
+        // Verificar que el usuario a registrar no exista ya previamente
+        const user = await User.findOne({ username });
+
+        if (user) {
+            return { error: "Username already exists" };
+        }
+
+        /* Si no existe... */
+
+        // Realizar el hashing a la password
+        const salt = await bcrypt.genSalt(10);
+        const hashedPassword = await bcrypt.hash(password, salt);
+
+        // Preparar el User a crear
+        const newUser = new User({
+            username,
+            email,
+            password: hashedPassword,
+        });
+
+        // Guardar el usuario en la B.D
+        await newUser.save();
+        console.log("saved to db");
+
+        return { success: true };
+    } catch (error) {
+        console.log(err);
+        return { error: "Something went wrong!" };
+    }
+}
+
+// Lógica para logearse con las credenciales (username & email)
+export const handleLoginWithCredentials = async (formData) => {
+    // Obteniendo los valores de las siguientes propiedades del formulario
+    const { username, password } = Object.fromEntries(formData);
+
+    try {
+        // Logearse con las siguientes credenciales
+        await signIn("credentials", { username, password });
+    } catch (err) {
+        console.log(err);
+
+        // En caso de error
+        if (err.message.includes("CredentialsSignin")) {
+            return { error: "Invalid username or password" };
+        }
+        throw err;
+    }
 }

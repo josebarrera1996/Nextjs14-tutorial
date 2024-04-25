@@ -1,5 +1,5 @@
 import { auth } from "@/lib/auth";
-import { handleLoginGithub } from "@/lib/actions";
+import { handleLoginGithub, handleLoginWithCredentials } from "@/lib/actions";
 
 const LoginPage = async () => {
     // Obteniendo los datos del usuario logeado
@@ -9,7 +9,12 @@ const LoginPage = async () => {
     return (
         <div>
             <form action={handleLoginGithub}>
-                <button>Login</button>
+                <button>Login (GitHub)</button>
+            </form>
+            <form action={handleLoginWithCredentials}>
+                <input type="text" name="username" placeholder="username" />
+                <input type="password" name="password" placeholder="password" />
+                <button>Login with Credentials</button>
             </form>
         </div>
     );
