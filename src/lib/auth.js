@@ -4,6 +4,7 @@ import bcrypt from 'bcryptjs';
 import CredentialsProvider from "next-auth/providers/credentials";
 import { connectToDb } from './utils';
 import { User } from './models';
+import { authConfig } from './auth.config';
 
 // Lógica para logearnos con las credenciales
 const login = async (credentials) => {
@@ -35,6 +36,8 @@ const login = async (credentials) => {
 };
 
 export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
+    ...authConfig,
+    // Lista de providers utilizados para logearse
     providers: [
         GitHub({
             clientId: process.env.GITHUB_ID,
@@ -51,6 +54,7 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
             },
         })
     ],
+    // Controlando que es lo que sucederá cuando se estén ejecutando acciones relacionadas a la autenticación
     callbacks: {
         // Controlando si el usuario ha logrado logearse y por lo tanto está autenticado...
         async signIn({ user, account, profile }) {
@@ -83,6 +87,9 @@ export const { handlers: { GET, POST }, auth, signIn, signOut } = NextAuth({
                 }
             }
             return true;
-        }
+        },
+        // Utilizar el resto de las callbacks de authConfig
+        // Esto es definido asi para evitar romper la app, ya que chocaría con las dependencias: bcrypt, mongoose, etc
+        ...authConfig.callbacks,
     }
 });
