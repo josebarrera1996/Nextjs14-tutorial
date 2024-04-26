@@ -74,7 +74,7 @@ export const handleLogoutGithub = async (e) => {
 }
 
 // Lógica para registrarse
-export const handleRegisterWithCredentials = async (formData) => {
+export const handleRegisterWithCredentials = async (previousState, formData) => {
     // Obteniendo los valores de los siguientes campos
     const { username, email, password, passwordRepeat } =
         Object.fromEntries(formData);
@@ -120,7 +120,7 @@ export const handleRegisterWithCredentials = async (formData) => {
 }
 
 // Lógica para logearse con las credenciales (username & email)
-export const handleLoginWithCredentials = async (formData) => {
+export const handleLoginWithCredentials = async (previousState, formData) => {
     // Obteniendo los valores de las siguientes propiedades del formulario
     const { username, password } = Object.fromEntries(formData);
 

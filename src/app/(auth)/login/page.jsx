@@ -1,5 +1,7 @@
 import { auth } from "@/lib/auth";
-import { handleLoginGithub, handleLoginWithCredentials } from "@/lib/actions";
+import { handleLoginGithub } from "@/lib/actions";
+import LoginForm from "@/components/loginForm/LoginForm";
+import styles from './login.module.css';
 
 const LoginPage = async () => {
     // Obteniendo los datos del usuario logeado
@@ -7,15 +9,14 @@ const LoginPage = async () => {
     console.log(session);
 
     return (
-        <div>
-            <form action={handleLoginGithub}>
-                <button>Login (GitHub)</button>
-            </form>
-            <form action={handleLoginWithCredentials}>
-                <input type="text" name="username" placeholder="username" />
-                <input type="password" name="password" placeholder="password" />
-                <button>Login with Credentials</button>
-            </form>
+        <div className={styles.container}>
+            <div className={styles.wrapper}>
+                <form action={handleLoginGithub}>
+                    <button className={styles.github}>Login with Github</button>
+                </form>
+                {/* Renderizando el siguiente componente de tipo 'client' */}
+                <LoginForm />
+            </div>
         </div>
     );
 }
