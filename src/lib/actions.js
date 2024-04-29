@@ -9,9 +9,9 @@ import { signIn, signOut } from "./auth";
 /* Definiendo las 'Server Actions' */
 
 // Lógica para añadir un nuevo Post
-export const addPost = async (formData) => {
+export const addPost = async (prevState, formData) => {
     // Obteniendo los valores de las siguientes propiedades
-    const { title, desc, slug, userId } = Object.fromEntries(formData);
+    const { title, desc, slug, img, userId } = Object.fromEntries(formData);
     console.log(title, desc, slug, userId);
 
     try {
@@ -23,6 +23,7 @@ export const addPost = async (formData) => {
             title,
             desc,
             slug,
+            img,
             userId
         });
 
@@ -30,8 +31,9 @@ export const addPost = async (formData) => {
         await newPost.save();
         console.log('Saved to db');
 
-        // Revalidando la siguiente ruta. Es decir, refrescará la data de esta
+        // Revalidando las siguientes rutas. Es decir, refrescará la data de estas
         revalidatePath('/blog');
+        revalidatePath("/admin");
     } catch (error) {
         console.log(error);
         return {
@@ -53,13 +55,63 @@ export const deletePost = async (formData) => {
         await Post.findByIdAndDelete(id);
         console.log("deleted from db");
 
-        // Revalidando la siguiente ruta. Es decir, refrescará la data de esta
+        // Revalidando las siguientes rutas. Es decir, refrescará la data de estas
         revalidatePath("/blog");
+        revalidatePath("/admin");
     } catch (error) {
         console.log(error);
         return { error: "Something went wrong!" };
     }
 }
+
+export const addUser = async (prevState, formData) => {
+    // Obtener los valores de los siguientes campos
+    const { username, email, password, img } = Object.fromEntries(formData);
+
+    try {
+        // Conexión a la B.D
+        connectToDb();
+
+        // Preparando el objeto a insertar
+        const newUser = new User({
+            username,
+            email,
+            password,
+            img,
+        });
+
+        // Guardando el usuario creado en la B.D
+        await newUser.save();
+        console.log("saved to db");
+
+        // Revalidando la siguiente ruta. Es decir, refrescará la data de esta
+        revalidatePath("/admin");
+    } catch (err) {
+        console.log(err);
+        return { error: "Something went wrong!" };
+    }
+};
+
+export const deleteUser = async (formData) => {
+    // Obteniendo el valor de la siguiente propiedad
+    const { id } = Object.fromEntries(formData);
+
+    try {
+        // Conexión a la B.D
+        connectToDb();
+
+        // Eliminar el usuario (por su ID) y los Post de este.
+        await Post.deleteMany({ userId: id });
+        await User.findByIdAndDelete(id);
+        console.log("deleted from db");
+
+        // Revalidando la siguiente ruta. Es decir, refrescará la data de esta
+        revalidatePath("/admin");
+    } catch (err) {
+        console.log(err);
+        return { error: "Something went wrong!" };
+    }
+};
 
 // Lógica para logearnos como usuario
 export const handleLoginGithub = async (e) => {
